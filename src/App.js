@@ -14,6 +14,7 @@ class App extends Component {
 					field: 'make',
 					sortable: true,
 					filter: true,
+					checkboxSelection: true,
 				},
 				{
 					headerName: 'Model',
@@ -36,7 +37,6 @@ class App extends Component {
 		fetch('https://www.ag-grid.com/example-assets/row-data.json')
 			.then((result) => result.json())
 			.then((rowData) => this.setState({ rowData }));
-		console.log('Hello World');
 	}
 
 	render() {
@@ -45,6 +45,7 @@ class App extends Component {
 				className='ag-theme-balham'
 				style={{ height: '500px', width: '600px' }}>
 				<AgGridReact
+					rowSelection='multiple'
 					columnDefs={this.state.columnDefs}
 					rowData={this.state.rowData}></AgGridReact>
 			</div>
