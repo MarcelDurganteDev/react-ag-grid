@@ -39,12 +39,27 @@ class App extends Component {
 			.then((rowData) => this.setState({ rowData }));
 	}
 
+	onButtonClick = () => {
+		const selectedNodes = this.gridApi.getSelectedNodes();
+		const selectedData = selectedNodes.map((node) => node.data); // output: array of objects [{make: 'Porsche', model: 'Boxter', price: 72000}, ...]
+		const selectedDataString = selectedData
+			.map((node) => `${node.make} ${node.price}`)
+			.join(', ');
+		alert(`Selected nodes: ${selectedDataString}`);
+	};
+
 	render() {
 		return (
 			<div
 				className='ag-theme-balham'
 				style={{ height: '500px', width: '600px' }}>
+				<button type='button' onClick={this.onButtonClick}>
+					Seleted rows
+				</button>
 				<AgGridReact
+					onGridReady={(params) => {
+						this.gridApi = params.api;
+					}}
 					rowSelection='multiple'
 					columnDefs={this.state.columnDefs}
 					rowData={this.state.rowData}></AgGridReact>
