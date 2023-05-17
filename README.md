@@ -1,6 +1,6 @@
 # **Using ag-Grid with React**
 
-## Thanks to source: 😇 [thinkster](https://thinkster.io/tutorials/using-ag-grid-with-react-getting-started) or <https://thinkster.io/>
+## Thanks to source: 😇 [thinkster](https://thinkster.io/) or <https://thinkster.io/tutorials/using-ag-grid-with-react-getting-started> for the specific project-based course
 
 ### Basic features of ag-Grid Community in this projects: data, sorting and filtering, and using the grid and column APIs ( gridApi / columnApi) to make changes to your data grid.
 
