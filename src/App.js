@@ -8,6 +8,7 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			modelVisibility: true,
 			columnDefs: [
 				{
 					headerName: 'Make',
@@ -39,6 +40,36 @@ class App extends Component {
 			.then((rowData) => this.setState({ rowData }));
 	}
 
+	componentDidUpdate() {
+		// workaround to stop 'ResizeObserver loop limit exceeded' error from appearing when toggling model column
+		window.addEventListener('error', (e) => {
+			if (e.message === 'ResizeObserver loop limit exceeded') {
+				const resizeObserverErrDiv = document.getElementById(
+					'webpack-dev-server-client-overlay-div'
+				);
+				const resizeObserverErr = document.getElementById(
+					'webpack-dev-server-client-overlay'
+				);
+				if (resizeObserverErr) {
+					resizeObserverErr.setAttribute('style', 'display: none');
+				}
+				if (resizeObserverErrDiv) {
+					resizeObserverErrDiv.setAttribute('style', 'display: none');
+				}
+			}
+		});
+		this.columnApi.setColumnVisible('model', this.state.modelVisibility);
+	}
+
+	onGridReady = (params) => {
+		this.gridApi = params.api; // output: GridApi
+		this.columnApi = params.columnApi; // output: ColumnApi
+	};
+
+	toggleModelColumn = () => {
+		this.setState({ modelVisibility: !this.state.modelVisibility });
+	};
+
 	onButtonClick = () => {
 		const selectedNodes = this.gridApi.getSelectedNodes();
 		const selectedData = selectedNodes.map((node) => node.data); // output: array of objects [{make: 'Porsche', model: 'Boxter', price: 72000}, ...]
@@ -56,10 +87,11 @@ class App extends Component {
 				<button type='button' onClick={this.onButtonClick}>
 					Seleted rows
 				</button>
+				<button type='button' onClick={this.toggleModelColumn}>
+					Toggle Model Column
+				</button>
 				<AgGridReact
-					onGridReady={(params) => {
-						this.gridApi = params.api;
-					}}
+					onGridReady={this.onGridReady}
 					rowSelection='multiple'
 					columnDefs={this.state.columnDefs}
 					rowData={this.state.rowData}></AgGridReact>
