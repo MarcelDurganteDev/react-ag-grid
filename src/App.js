@@ -8,6 +8,7 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			// add a modelVisbility property to our state to toggle the visibility of this column by changing a piece of state and then using React's componentDidUpdate lifecycle method to call ag-Grid's Column API.
 			modelVisibility: true,
 			columnDefs: [
 				{
@@ -40,6 +41,7 @@ class App extends Component {
 			.then((rowData) => this.setState({ rowData }));
 	}
 
+	// call the Column API's setColumnVisible function:
 	componentDidUpdate() {
 		// workaround to stop 'ResizeObserver loop limit exceeded' error from appearing when toggling model column
 		window.addEventListener('error', (e) => {
@@ -57,15 +59,17 @@ class App extends Component {
 					resizeObserverErrDiv.setAttribute('style', 'display: none');
 				}
 			}
-		});
+		}); // emd
 		this.columnApi.setColumnVisible('model', this.state.modelVisibility);
 	}
 
+	// extracted our inline function for onGridReady into its method because we'll need to store the instance of both APIs on our class to get both the Column API and the Grid API:
 	onGridReady = (params) => {
 		this.gridApi = params.api; // output: GridApi
 		this.columnApi = params.columnApi; // output: ColumnApi
 	};
 
+	// button's click handler calls setState and toggle modelVisibility:
 	toggleModelColumn = () => {
 		this.setState({ modelVisibility: !this.state.modelVisibility });
 	};
@@ -87,9 +91,11 @@ class App extends Component {
 				<button type='button' onClick={this.onButtonClick}>
 					Seleted rows
 				</button>
+				{/* button to toggle the model column visibility: */}
 				<button type='button' onClick={this.toggleModelColumn}>
 					Toggle Model Column
 				</button>
+				{/* Modify the use of AgGridReact for extracting previous inline onGridReady function */}
 				<AgGridReact
 					onGridReady={this.onGridReady}
 					rowSelection='multiple'
