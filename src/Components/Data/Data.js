@@ -11,8 +11,11 @@ class Data extends Component {
 			modelVisibility: true,
 			columnDefs: [
 				{ headerName: 'Name', field: 'name' },
-				{ headerName: 'Street', field: 'address.street1' },
-				{ headerName: 'City', field: 'address.city' },
+				{
+					headerName: 'Adress',
+					valueGetter: ({ data }) =>
+						`${data.address.street1}, ${data.address.city}, ${data.address.state}, ${data.address.zip}`,
+				},
 			],
 			defaultColDef: {
 				resizable: true,
